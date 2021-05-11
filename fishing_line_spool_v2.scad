@@ -4,7 +4,7 @@ totalLength = 140;
 // Width of spool
 totalWidth = 25;
 // Thickness of walls
-wallThickness = 3;
+wallThickness = 2;
 // The height of the walls
 wallHeight = 17 ;
 
@@ -14,25 +14,30 @@ wallRounding = 2;
 bigPinWidth = 8;
 bigPinHeight = 10;
 smallPinWidth = 3;
-smallPinHeight = 10;
+smallPinHeight = 8;
 
 // Pin placement
 pin1Distance = 10;
 pin2Distance = 40;
 
 // Make hole slightly bigger to compensate for 3d printer 
-holeCompensation = 0.5;
+holeCompensationWidth = 0.5;
+holeCompensationLength = 1;
 
-lineHolderCircleThickness = bigPinWidth + 5;
+lineHolderHoleThickness = bigPinWidth + 1;
+lineHolderCircleThickness = bigPinWidth + 6;
 lineHolderHandleThickness = 3;
 lineHolderHandleWidth = bigPinHeight+smallPinHeight-5;
 lineHolderHandleLength = 20;
+
+hookHolderLength = 9;
+hookHolderWidth = 1;
 
 
 // Smoothness (of circles). 
 // Can be put lower(20) when testing for better performance, 
 // and higher(40) for final export
-$fn = 20;
+$fn = 40;
 
 
 wholeSpool();
@@ -43,50 +48,123 @@ lineHolder();
 module bottomPlate () {
     color("blue")
     translate(v = [0, 0, wallThickness/2])
-    roundedcube([totalLength, totalWidth, wallThickness], true, wallRounding, "z");
+    // The roundedcube() screws up the wallthickness and
+    // everything else becomes wrong...
+    /*
+    roundedcube(
+        [
+        totalLength,
+        totalWidth,
+        wallThickness
+        ]
+        ,
+        true,
+        wallRounding,
+        "z"
+    );
+    */
+    cube([totalLength, totalWidth, wallThickness], true);
 }
 
 
-module pin () {
-     bigHeight = wallThickness+(bigPinHeight/2);
+module pin (hookHolder) {
+    bigLift = (wallThickness/2)+(bigPinHeight/2);
+    echo(bigLift=bigLift);
     color("red")
 
-    translate(v = [0, 0, bigHeight])
-    //translate(v = [0, 0, 10])
+    translate(v = [0, 0, bigLift])
         cylinder(h=bigPinHeight, d=bigPinWidth, center=true);
 
     color("green")
-    translate(v = [0, 0, bigHeight+smallPinHeight])
+    translate(v = [0, 0, bigLift+bigPinHeight-1])
         cylinder(h=smallPinHeight, d=smallPinWidth, center=true);
+
+    if (hookHolder) {
+        color("purple")
+        translate(
+            v = [
+                    0,
+                    0,
+                    (wallThickness/2)+((bigPinHeight)/2)
+                ]
+            )
+            cube(
+                [
+                    bigPinWidth+hookHolderLength,
+                    hookHolderWidth,
+                    bigPinHeight
+                ],
+                true
+            );
+    }
 }
 
-module hole () {
-     bigHeight = wallThickness+(bigPinHeight/2);
+module hole (hookHolder) {
     color("orange")
     difference() {
-    
-    translate(v = [0, 0, ((bigHeight+smallPinHeight)/2)+wallThickness])
-    //translate(v = [0, 0, 10])
-        cylinder(h=bigPinHeight+smallPinHeight, d=bigPinWidth, center=true);
+    PinForHole(hookHolder);
+
 
     color("green")
-    translate(v = [0, 0, bigHeight+smallPinHeight])
-        cylinder(h=smallPinHeight, d=smallPinWidth+holeCompensation, center=true);
+    translate(
+        v = [
+            0,
+            0,
+            bigPinHeight+bigPinHeight-(smallPinHeight/2)+holeCompensationLength
+            ]
+        )
+        cylinder(
+        h=smallPinHeight+holeCompensationLength,
+        d=smallPinWidth+holeCompensationWidth,
+        center=true
+        );
+    }
+}
+
+module PinForHole(hookHolder) {
+        translate(
+            v = [
+                    0,
+                    0,
+                    (((bigPinHeight+bigPinHeight)/2)+(wallThickness/2))
+            ]
+        )
+        cylinder(h=bigPinHeight+bigPinHeight, d=bigPinWidth, center=true);
+    if (hookHolder) {
+        color("purple")
+        translate(
+        v = [
+                0,
+                0,
+                ((wallThickness/2)+(bigPinHeight+bigPinHeight)/2)
+            ]
+        )
+        cube(
+            [
+                bigPinWidth+hookHolderLength,
+                hookHolderWidth,
+                bigPinHeight+bigPinHeight
+            ],
+            true
+        );
     }
 }
 
 
 module wholeSpool() {
     bottomPlate ();
-    // Create pin 1
-    translate(v = [(totalLength/2)-pin1Distance, 0, 0]) pin();
-    // Create pin 2
-    translate(v = [(totalLength/2)-pin2Distance, 0, 0]) pin();
-    
-    // Create hole 1
-    translate(v = [-(totalLength/2)+pin1Distance, 0, 0]) hole();
-    // Create hole 2
-    translate(v = [-(totalLength/2)+pin2Distance, 0, 0]) hole();
+    // 1: Create pin
+    translate(v = [(totalLength/2)-pin1Distance, 0, 0]) pin(false);
+
+    // 2: Create hole
+    translate(v = [(totalLength/2)-pin2Distance, 0, 0]) hole(true);
+
+    // 3: Create pin
+    translate(v = [-(totalLength/2)+pin2Distance, 0, 0]) pin(true);
+    //translate(v = [-(totalLength/2)+26, 0, 0]) hole();
+
+    // 4: Create hole
+    translate(v = [-(totalLength/2)+pin1Distance, 0, 0]) hole(false);
 }
 
 
@@ -94,7 +172,7 @@ module lineHolder () {
     color("grey")
     difference () {
         lineHolderParts();
-        translate(v = [(totalLength/2)+37, 0, 0])
+        translate(v = [(totalLength/2)+36.5, 0, 0])
        cylinder(h=bigPinHeight+smallPinHeight+20, d=bigPinWidth, center=true);
     }
 
