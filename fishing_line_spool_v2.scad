@@ -1,49 +1,67 @@
-// Main parameters
+/* [Main dimension] */
 // Total length of spool from end to end
 totalLength = 140;
 // Width of spool
 totalWidth = 25;
 // Thickness of walls
 wallThickness = 2;
-// The height of the walls
-wallHeight = 17 ;
 
-// How round the borders are
+/* [Hidden] */
 wallRounding = 2;
 
+/* [Pin dimensions] */
+// Width of big part of pins
 bigPinWidth = 8;
+// Height of big part of pins
 bigPinHeight = 10;
+// Width of small part of pins
 smallPinWidth = 3;
+// Height of small part of pins
 smallPinHeight = 8;
 
-// Pin placement
+// Length of "hook holder" wall
+hookHolderLength = 9;
+// Width of "hook holder" wall
+hookHolderWidth = 1;
+
+/* [Pin placement] */
+// Distance from end for placement of first pair of pins
 pin1Distance = 10;
+// Length from end for placement of second pair of pins
 pin2Distance = 40;
 
-// Make hole slightly bigger to compensate for 3d printer 
+/* [Printer compensation] */
+// Make hole slightly bigger to compensate for 3d printer inaccuracy
+// Make hole inside pin this much wider than the small pin
 holeCompensationWidth = 0.5;
+// Make hole inside pin this much longer than the small pin
 holeCompensationLength = 1;
 
-lineHolderHoleThickness = bigPinWidth + 1;
-lineHolderCircleThickness = bigPinWidth + 6;
-lineHolderHandleThickness = 3;
-lineHolderHandleWidth = bigPinHeight+smallPinHeight-5;
-lineHolderHandleLength = 20;
 
-hookHolderLength = 9;
-hookHolderWidth = 1;
+/* [Lineholder] */
+// Make lineholder hole this much wider than the big pin
+lineHolderHoleWidthCompensation = 1.5;
+lineHolderHoleThickness = bigPinWidth + lineHolderHoleWidthCompensation;
+// Make lineholder outwards circle this much wider than the big pin
+lineHolderCircleThicknessIncrement = 6;
+lineHolderCircleThickness = bigPinWidth + lineHolderCircleThicknessIncrement;
+
+// Thickness of "handle"
+lineHolderHandleThickness = 3;
+// Wiggle room for width. How much space is left on the sides
+lineHolderHandleWidthWiggleRoom = 5;
+lineHolderHandleWidth = bigPinHeight+smallPinHeight-lineHolderHandleWidthWiggleRoom;
+// Length of the handle
+lineHolderHandleLength = 20;
 
 
 // Smoothness (of circles). 
-// Can be put lower(20) when testing for better performance, 
-// and higher(40) for final export
-$fn = 40;
+// Can be put lower(20) when testing for better performance, and higher(40) for final export
+$fn = 20 + 0;
 
 
 wholeSpool();
 lineHolder();
-
-
 
 module bottomPlate () {
     color("blue")
