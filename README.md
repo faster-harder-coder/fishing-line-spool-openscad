@@ -11,6 +11,9 @@ Print perfectly sized spools for storing your fishing line, bobber and hook.
 
 
 
+## Development
+Run the file `dev/install-githooks.sh` to install githooks that assists development.
+
 ## License
 
 This project is licensed under the GNU GPLv3 License
