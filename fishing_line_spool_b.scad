@@ -1,3 +1,17 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /* [Main dimension] */
 // Total length of spool from end to end
 totalLength = 140;
@@ -55,7 +69,7 @@ lineHolderHandleWidth = bigPinHeight+smallPinHeight-lineHolderHandleWidthWiggleR
 lineHolderHandleLength = 20;
 
 
-// Smoothness (of circles). 
+// Smoothness (of circles).
 // Can be put lower(20) when testing for better performance, and higher(40) for final export
 $fn = 20 + 0;
 
@@ -249,7 +263,7 @@ module roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "a
 						) {
 							sphere(r = radius);
 						} else {
-							rotate = 
+							rotate =
 								(apply_to == "xmin" || apply_to == "xmax" || apply_to == "x") ? [0, 90, 0] : (
 								(apply_to == "ymin" || apply_to == "ymax" || apply_to == "y") ? [90, 90, 0] :
 								[0, 0, 0]

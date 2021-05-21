@@ -1,3 +1,17 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // Main parameters
 // Total length of spool from end to end
 totalLength = 140;
@@ -20,8 +34,8 @@ holeLength = totalLength - 50;
 // Width of the inner hole
 holeWidth = innerWidth/2;
 
-// Smoothness (of circles). 
-// Can be put lower when testing for better performance, 
+// Smoothness (of circles).
+// Can be put lower when testing for better performance,
 // and higher for final export
 $fn = 40;
 
@@ -33,7 +47,7 @@ use <josl/cuts/puzzle.scad>
 Puzzle( y=[3.5,16.5]) {
     translate( [ -totalLength/2, 0, 0 ] ) {
         wholeSpool();
-   } 
+   }
 }
 
 */
@@ -73,7 +87,7 @@ module wholeSpool() {
     difference() {
     {
         {
-            difference() 
+            difference()
             {
             fullSpool();
             translate([totalLength + circleDepth , innerWidth/2, 0]) endCircle();
